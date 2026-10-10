@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nativé Pedidos</title>
+<meta name="description" content="Plataforma interna de registro de pedidos de Nativé · Bienestar natural.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12341C">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pedidos">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Marcellus&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <img src="assets/img/logo.webp" alt="Nativé · Bienestar natural" width="40" height="40">
+      <div class="brand-txt"><span class="brand-name">NATIVÉ</span><span class="brand-sub">Pedidos</span></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" data-view="nuevo" aria-selected="true">Nuevo pedido</button>
+      <button class="tab" role="tab" data-view="pedidos" aria-selected="false">Pedidos <span class="badge" id="badge" hidden title="Por despachar">0</span></button>
+      <button class="tab" role="tab" data-view="catalogo" aria-selected="false">Catálogo</button>
+    </nav>
+    <div class="top-meta">
+      <span class="today" id="today"></span>
+      <span class="sync" id="sync" data-s="connecting"><i></i><span id="sync-t">Conectando…</span></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="note" id="exbar" hidden>
+    <span class="pill ex">Ejemplo</span>
+    <span class="note-t" id="exbar-t"></span>
+    <span class="note-act" id="exbar-act"></span>
+  </div>
+  <div class="note warn" id="robar" hidden><b>Solo lectura.</b> Puedes revisar pedidos, pero tu acceso no permite registrar ni modificar. Pide acceso de colaborador a quien administra esta plataforma.</div>
+
+  <!-- ============ NUEVO PEDIDO ============ -->
+  <section class="view" id="v-nuevo" aria-labelledby="nv-title">
+    <div class="phead">
+      <div>
+        <div class="eyebrow" id="nv-eyebrow">Registro rápido</div>
+        <h1 id="nv-title">Nuevo pedido</h1>
+      </div>
+      <div class="hints" aria-hidden="true"><span><kbd>/</kbd>&nbsp;buscar producto</span><span><kbd>Ctrl</kbd><kbd>↵</kbd>&nbsp;registrar</span></div>
+    </div>
+    <div class="note warn" id="editbar" hidden>
+      <span class="note-t" id="editbar-t"></span>
+      <span class="note-act"><button type="button" class="btn sm" data-act="edit-cancel">Cancelar edición</button></span>
+    </div>
+
+    <div class="nuevo">
+      <div class="panel" id="form">
+        <section class="blk" aria-labelledby="h-cli">
+          <div class="blk-h"><h2 id="h-cli">Cliente</h2><p>Con el celular reconocemos a quien ya te compró y completamos sus datos.</p></div>
+          <div class="blk-b">
+            <div class="grid">
+              <div class="f c2"><label class="l" for="f-phone">Celular</label><div class="prefix"><span>+51</span><input class="in" id="f-phone" data-f="phone" inputmode="tel" placeholder="987 654 321" maxlength="15" autocomplete="off"></div><small class="err" id="e-phone" hidden></small></div>
+              <div class="f c3"><label class="l" for="f-name">Nombre y apellido</label><input class="in" id="f-name" data-f="name" placeholder="Nombre del cliente" autocomplete="off"><small class="err" id="e-name" hidden></small></div>
+              <div class="f c1"><label class="l" for="f-doc">DNI / RUC</label><input class="in" id="f-doc" data-f="doc" inputmode="numeric" maxlength="11" placeholder="Opcional" autocomplete="off"></div>
+            </div>
+            <div class="match" id="match" hidden></div>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="h-prod">
+          <div class="blk-h"><h2 id="h-prod">Productos</h2><p>Toca un producto para sumarlo. Escribe y pulsa Enter para agregar el primero de la lista.</p></div>
+          <div class="blk-b">
+            <div class="ptools">
+              <div class="search">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+                <input class="in" id="p-q" placeholder="Buscar en el catálogo" autocomplete="off" aria-label="Buscar producto">
+                <kbd aria-hidden="true">/</kbd>
+              </div>
+              <button type="button" class="btn" data-act="free" id="free-btn"></button>
+            </div>
+            <div class="picks" id="picks"></div>
+            <div class="lines" id="lines" hidden></div>
+            <small class="err" id="e-items" hidden></small>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="h-ent">
+          <div class="blk-h"><h2 id="h-ent">Entrega</h2><p>Delivery en Lima y Callao, envío por agencia a provincia o recojo en tienda.</p></div>
+          <div class="blk-b">
+            <div class="seg" role="group" aria-label="Tipo de entrega" id="seg-delivery"></div>
+            <div class="grid mt" id="dl-lima">
+              <div class="f c2"><label class="l" for="f-district">Distrito</label><input class="in" id="f-district" data-f="district" list="dl-districts" placeholder="Ej. Miraflores" autocomplete="off"><small class="err" id="e-district" hidden></small></div>
+              <div class="f c4"><label class="l" for="f-address">Dirección</label><input class="in" id="f-address" data-f="address" placeholder="Calle, número, interior" autocomplete="off"><small class="err" id="e-address" hidden></small></div>
+              <div class="f c6"><label class="l" for="f-reference">Referencia <span class="opt">· opcional</span></label><input class="in" id="f-reference" data-f="reference" placeholder="Frente al parque, portón verde…" autocomplete="off"></div>
+            </div>
+            <div class="grid mt" id="dl-prov" hidden>
+              <div class="f c2"><label class="l" for="f-agency">Agencia</label><span class="sel"><select class="in" id="f-agency" data-f="agency"></select></span></div>
+              <div class="f c2"><label class="l" for="f-city">Destino</label><input class="in" id="f-city" data-f="city" list="dl-deps" placeholder="Ciudad o departamento" autocomplete="off"><small class="err" id="e-city" hidden></small></div>
+              <div class="f c2"><label class="l" for="f-rdoc">DNI de quien recoge</label><input class="in" id="f-rdoc" data-f="recipientDoc" inputmode="numeric" maxlength="8" placeholder="8 dígitos" autocomplete="off"><small class="err" id="e-rdoc" hidden></small></div>
+            </div>
+            <div class="grid mt">
+              <div class="f c2 half"><label class="l" for="f-date" id="l-date">Fecha de entrega</label><input class="in" type="date" id="f-date" data-f="date"></div>
+              <div class="f c2 half" id="slot-wrap"><label class="l" for="f-slot">Horario</label><span class="sel"><select class="in" id="f-slot" data-f="slot"></select></span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="h-pago">
+          <div class="blk-h"><h2 id="h-pago">Pago</h2><p>Cómo pagó el cliente o cuánto queda por cobrar al entregar.</p></div>
+          <div class="blk-b">
+            <div class="chips" role="group" aria-label="Método de pago" id="chips-method"></div>
+            <div class="mt"><div class="seg" role="group" aria-label="Estado del pago" id="seg-pay"></div></div>
+            <div class="grid mt" id="pay-extra">
+              <div class="f c2" id="adv-wrap" hidden><label class="l" for="f-advance">Monto adelantado</label><div class="prefix"><span>S/</span><input class="in" id="f-advance" data-f="advance" inputmode="decimal" placeholder="0.00" autocomplete="off"></div><small class="err" id="e-advance" hidden></small></div>
+              <div class="f c2" id="op-wrap"><label class="l" for="f-op">N° de operación <span class="opt">· opcional</span></label><input class="in" id="f-op" data-f="opNumber" inputmode="numeric" placeholder="Del voucher" autocomplete="off"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="h-notas">
+          <div class="blk-h"><h2 id="h-notas">Notas</h2><p>Aparecen en el detalle y en el resumen para WhatsApp.</p></div>
+          <div class="blk-b"><textarea class="in" id="f-notes" data-f="notes" rows="2" placeholder="Ej. Es para regalo, incluir tarjeta." aria-label="Notas del pedido"></textarea></div>
+        </section>
+      </div>
+
+      <aside class="side" aria-label="Resumen del pedido">
+        <div class="ticket">
+          <div class="t-head"><span class="eyebrow">Nota de pedido</span><span class="t-no" id="t-no">N° ----</span></div>
+          <div class="t-body">
+            <div class="t-cust" id="t-cust"></div>
+            <ul class="t-lines" id="t-lines"></ul>
+            <div class="t-sums">
+              <div class="row"><span>Subtotal</span><span class="num" id="t-sub">S/ 0.00</span></div>
+              <div class="row"><label for="f-shipping">Envío</label><span class="mini"><span>S/</span><input id="f-shipping" data-f="shipping" inputmode="decimal" placeholder="0.00" autocomplete="off"></span></div>
+              <div class="row"><label for="f-discount">Descuento</label><span class="mini"><span>− S/</span><input id="f-discount" data-f="discount" inputmode="decimal" placeholder="0.00" autocomplete="off"></span></div>
+            </div>
+          </div>
+          <div class="t-total"><span>Total</span><strong id="t-total">S/ 0.00</strong></div>
+          <div class="t-pay" id="t-pay"></div>
+          <div class="t-act">
+            <button type="button" class="btn primary" data-act="submit" id="submit"><span id="submit-t">Registrar pedido</span><span class="kbd-in" aria-hidden="true">Ctrl ↵</span></button>
+            <button type="button" class="btn ghost" data-act="reset">Limpiar formulario</button>
+          </div>
+        </div>
+        <div class="panel recent">
+          <div class="recent-h"><span class="eyebrow">Últimos registrados</span><button type="button" class="link" data-view="pedidos">Ver todos</button></div>
+          <div id="recent"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ PEDIDOS ============ -->
+  <section class="view" id="v-pedidos" hidden aria-labelledby="pd-title">
+    <div class="phead">
+      <div><div class="eyebrow">Libro de pedidos</div><h1 id="pd-title">Pedidos</h1></div>
+      <div class="phead-r">
+        <div class="seg" role="group" aria-label="Periodo" id="seg-period"></div>
+        <button type="button" class="btn" data-act="csv" id="csv-btn"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></svg>Exportar CSV</button>
+      </div>
+    </div>
+    <div class="metrics" id="metrics"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input class="in" id="o-q" placeholder="Buscar cliente, celular, distrito o N°" autocomplete="off" aria-label="Buscar pedidos">
+      </div>
+      <div class="seg stabs" role="group" aria-label="Estado" id="stabs"></div>
+    </div>
+    <div class="olist" id="olist"></div>
+    <div class="panel backup" id="backup" hidden>
+      <div class="backup-t">
+        <span class="eyebrow">Respaldo</span>
+        <p id="backup-p"></p>
+      </div>
+      <div class="backup-act">
+        <button type="button" class="btn sm" data-act="bk-save">Descargar respaldo</button>
+        <button type="button" class="btn sm ghost" data-act="bk-load">Restaurar desde archivo</button>
+        <input type="file" id="bk-file" accept=".json,application/json" hidden>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <section class="view" id="v-catalogo" hidden aria-labelledby="ct-title">
+    <div class="phead">
+      <div><div class="eyebrow">Productos y precios</div><h1 id="ct-title">Catálogo</h1></div>
+      <p class="muted" style="margin:0;max-width:52ch;font-size:13px">El precio es la base de cada pedido; puedes ajustarlo al registrar. Los productos pausados no aparecen al vender.</p>
+    </div>
+    <div class="panel cat-add">
+      <div class="cq"><div class="grid">
+        <div class="f c3"><label class="l" for="c-name" id="c-name-l">Nuevo producto</label><input class="in" id="c-name" placeholder="Ej. Maca negra gelatinizada" autocomplete="off"></div>
+        <div class="f c2 half"><label class="l" for="c-pres">Presentación</label><input class="in" id="c-pres" placeholder="Ej. Bolsa 500 g" autocomplete="off"></div>
+        <div class="f c1 half"><label class="l" for="c-price">Precio</label><div class="prefix"><span>S/</span><input class="in" id="c-price" inputmode="decimal" placeholder="0.00" autocomplete="off"></div></div>
+      </div></div>
+      <div class="cat-add-act">
+        <button type="button" class="btn ghost" data-act="cat-cancel" id="cat-cancel" hidden>Cancelar</button>
+        <button type="button" class="btn primary" data-act="cat-save" id="cat-save">Agregar</button>
+      </div>
+    </div>
+    <div class="olist" id="ctable"></div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim" hidden data-act="close"></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="d-title"></aside>
+
+<div class="mbar" id="mbar">
+  <div><div class="eyebrow">Total</div><strong id="m-total">S/ 0.00</strong></div>
+  <button type="button" class="btn primary" data-act="submit" id="m-submit">Registrar</button>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<datalist id="dl-districts"></datalist>
+<datalist id="dl-deps"></datalist>
+
+<script src="assets/js/ejemplos.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
