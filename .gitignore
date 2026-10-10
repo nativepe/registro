@@ -1,0 +1,21 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Respaldos y exportaciones descargados desde la plataforma
+# (contienen datos de clientes: nunca los subas a un repositorio público)
+respaldo-native-*.json
+pedidos-native-*.csv
+
+# Varios
+*.log
+node_modules/
